@@ -1,0 +1,50 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django specific files
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Migrations (optional, but useful if you don't want to track them)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Environment variables
+.env
+*.env
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Compiled code
+*.pyc
+*.pyo
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+.hypothesis/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Static files (optional, since Django can regenerate them)
+staticfiles/
+
+# Node modules (if using frontend with Django
