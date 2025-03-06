@@ -41,3 +41,12 @@ def client_update(request, id):
         return redirect('client_list')
     
     return render(request, 'client_app/update.html',{'client':client})
+
+def client_delete(request, id):
+    client= Client.objects.get(id=id)
+
+    if request.method =="POST":
+        client.delete()
+        return redirect('client_list')
+    
+    return render(request, "client_app/delete.html", {'client': client})

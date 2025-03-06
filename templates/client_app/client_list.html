@@ -12,6 +12,7 @@
             <li>
                 {{client.name}}-{{client.phone_num}}-{{client.address}}
                 <a href = "{% url 'client_update' client.id %}">Edit</a>
+                <a href = "{% url 'client_delete' client.id %}">Delete</a>
             </li>
         {% endfor %}
     </ul>
