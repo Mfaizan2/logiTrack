@@ -1,3 +1,5 @@
-from django.contrib import admin
+# from django.contrib import admin
 
-# Register your models here.
+# class CustomerAdmin(admin.Model):
+#     list_display = ('name', 'email', 'address', 'client')
+

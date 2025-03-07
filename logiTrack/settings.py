@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     #custome apps
     'client',
     'dashboard',
+    'customer',
 ]
 
 MIDDLEWARE = [
