@@ -30,7 +30,7 @@ def client_list(request):
     return render(request, 'client_app/client_list.html',{'clients':clients})
 
 def client_list_in_json(request):
-    clients = Client.objects.all().values("id", "name", "phone_num", "address")  # Get data as a dictionary
+    clients = Client.objects.all().values("id", "name", "phone_num", "address")
     print(f"clients = {clients}")
     data = {
       "clients": list(clients)
@@ -39,7 +39,7 @@ def client_list_in_json(request):
 
 
 def client_update(request, id):
-    client = get_object_or_404(Client, id=id)
+    client = Client.objects.all(id=id)
 
     if request.method == 'POST':
         client.name = request.POST.get('name')

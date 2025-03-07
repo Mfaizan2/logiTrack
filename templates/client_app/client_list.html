@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
     <script>
+        function client_update(clientId){
+            $.ajax({
+                url:`/client_update/${clientid}`
+                type: "GET",
+                success:function(response){
+                    
+                }
+            })
+        }
         function print_name(){
             alert("Wajahat Khan");
         }
@@ -76,43 +86,45 @@
     </div>
 
     <!-- Fixed Modal -->
-    <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="clientModalLabel">Client Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for client in clients %}
-                            <li>
-                                {{ client.name }} - {{ client.phone_num }} - {{ client.address }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="container mt-4" >
+        <table id="clientTable" class="display table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>id#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{client.id}}</td>
+                    <td>{{client.name}}</td>
+                    <td>{{client.phone_num}}</td>
+                    <td>{{client.address}}</td>
+                    <td>
+                        <a href="{% url 'client_update' client.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'client_delete' client.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <!-- Links -->
-    <a href="{% url 'client_create' %}">Add Client</a>
-    <a href="{% url 'dashboard:home' %}">Dashboard</a>
-
-    <ul>
-        {% for client in clients %}
-            <li>
-                {{ client.name }} - {{ client.phone_num }} - {{ client.address }}
-                <a href="{% url 'client_update' client.id %}">Edit</a>
-                <a href="{% url 'client_delete' client.id %}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'client_create' %}" class="btn btn-primary btn-sm me-2">Add Client</a>
+        <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-sm">Dashboard</a>
+    </div>
 
     <!-- Include Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 </body>
 </html>
