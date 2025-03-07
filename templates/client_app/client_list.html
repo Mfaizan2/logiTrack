@@ -7,6 +7,7 @@
 </head>
 <body>
     <a href= "{% url 'client_create' %}">Add Client</a>
+    <a href= "{% url 'dashboard:home' %}">Dashbord</a>
     <ul>
         {% for client in clients %}
             <li>
