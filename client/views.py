@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Client
 from django.contrib import messages
 
@@ -28,6 +28,14 @@ def client_create(request):
 def client_list(request):
     clients = Client.objects.all()
     return render(request, 'client_app/client_list.html',{'clients':clients})
+
+def client_list_in_json(request):
+    clients = Client.objects.all().values("id", "name", "phone_num", "address")  # Get data as a dictionary
+    print(f"clients = {clients}")
+    data = {
+      "clients": list(clients)
+    }
+    return JsonResponse(data, safe=False)
 
 
 def client_update(request, id):
