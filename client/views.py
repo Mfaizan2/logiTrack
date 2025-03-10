@@ -57,7 +57,6 @@ def client_update(request):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 def client_delete(request):
-    print('wajahat')
 
     if request.method =="POST":
         client_id = int(request.POST.get("client_id"))
@@ -75,8 +74,8 @@ def client_copy(request):
         client = Client.objects.get(id=client_id)
         new_client = Client.objects.create(
             name=client.name + "-copy",
-            phone_num=client.phone_num,
-            address=client.address
+            phone_num=client.phone_num ,
+            address=client.address + "-copy"
         )
         return JsonResponse({"message": "Client updated successfully!"})
     return JsonResponse({"error": "Invalid request"}, status=400)

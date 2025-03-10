@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Client List</h2>
-
-        <button onclick="getClientDetails(1)">Show Client 1 Details</button>
 
         <button type='button' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal">
             View Client Details
@@ -88,6 +88,8 @@
             </div>
         </div>
     </div>
+
+
     {% comment %} Delete_modal {% endcomment %}
     <div class="modal fade" id="deleteClientModal" tabindex="-1" aria-labelledby="deleteClientModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -135,12 +137,12 @@
                             data-bs-target="#editClientModal">
                             Edit
                         </button>
-                        <button onclick="" class="btn btn-danger btn-sm delete-btn" 
+                        <button onclick="deleteClientDetails({{client.id}})" class="btn btn-danger btn-sm delete-btn" 
                             data-bs-toggle="modal"
                             data-bs-target="#deleteClientModal">
                             Delete
                         </button>
-                        <button onclick="" class="btn btn-primary btn-sm delete-btn" 
+                        <button onclick="copyClientDetails({{client.id}})" class="btn btn-primary btn-sm delete-btn" 
                             data-bs-toggle="modal"
                             data-bs-target="#copyClientModal">
                             Copy
@@ -179,7 +181,16 @@
                 $("#client_name").val(clientsData[clientId].name);
                 $("#client_phone").val( clientsData[clientId].phone_num);
                 $("#client_address").val(clientsData[clientId].address);
+            } else {
+                console.log("Client not found.");
+            }
+        }
 
+        function deleteClientDetails(clientId){
+            if (clientsData[clientId]) {
+                console.log("Client Name:", clientsData[clientId].name);
+                console.log("Phone Number:", clientsData[clientId].phone_num);
+                console.log("Address:", clientsData[clientId].address);
                 $("#deleteClientModal h3").text(`Are you sure you want to delete ${clientsData[clientId].name}?`);
                 $("#deleteClientModal #client_id").val(clientsData[clientId].id);
             } else {
@@ -187,17 +198,16 @@
             }
         }
 
-        function fillcopymodal(clientId){
-            if (clientData[clientId]){
+        function copyClientDetails(clientId){
+            if (clientsData[clientId]){
                 console.log("filling copy modal with client id:", clientId);
 
-                $("#copyClientModal #client_id").val(clientsData[clientId].id);
-                $("#copyClientModal #client_name").val(clientData[clientId].name)
-                $("#copyClientModal #client_phone").val(clientsData[clientId].phone_num);
-                $("#copyClientModal #client_address").val(clientsData[clientId].address);
+                $("#copyClientModal #client_id").val(clientsData[clientId].id).prop("readonly", true);
+                $("#copyClientModal #client_name").val(clientsData[clientId].name).prop("readonly", true);
+                $("#copyClientModal #client_phone").val(clientsData[clientId].phone_num).prop("readonly", true);
+                $("#copyClientModal #client_address").val(clientsData[clientId].address).prop("readonly", true);
             }
         }
-        
             
         function client_update(clientId){
             $.ajax({
