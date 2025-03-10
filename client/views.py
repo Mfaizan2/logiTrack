@@ -38,23 +38,45 @@ def client_list_in_json(request):
     return JsonResponse(data, safe=False)
 
 
-def client_update(request, id):
-    client = Client.objects.all(id=id)
-
+def client_update(request):
+    print(request.POST)
     if request.method == 'POST':
+
+        client_id =int(request.POST.get("client_id"))
+        name = request.POST.get("name")
+        phone_num = request.POST.get("phone_num")
+        address = request.POST.get("address")
+
+        client = Client.objects.get(id=client_id)
+
         client.name = request.POST.get('name')
         client.phone_num = request.POST.get('phone_num')
         client.address = request.POST.get('address')
         client.save()
-        return redirect('client_list')
-    
-    return render(request, 'client_app/update.html',{'client':client})
+        return JsonResponse({"message": "Client updated successfully!"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
-def client_delete(request, id):
-    client= Client.objects.get(id=id)
+def client_delete(request):
+    print('wajahat')
 
     if request.method =="POST":
+        client_id = int(request.POST.get("client_id"))
+
+        client= Client.objects.get(id=client_id)
         client.delete()
-        return redirect('client_list')
-    
-    return render(request, "client_app/delete.html", {'client': client})
+        return JsonResponse({"message": "Client deleted successfully!"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+def client_copy(request):
+    print('khan')
+    if request.method == "POST":
+        client_id =int(request.POST.get("client_id"))
+
+        client = Client.objects.get(id=client_id)
+        new_client = Client.objects.create(
+            name=client.name + "-copy",
+            phone_num=client.phone_num,
+            address=client.address
+        )
+        return JsonResponse({"message": "Client updated successfully!"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
