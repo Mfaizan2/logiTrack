@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="text-center my-3">
+        <h2>Customers List</h2>
+    </div>
+    <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-lg">
+        <i class="fas fa-users"></i> Dashboard
+    </a>
+    <div class= "d-flex justify-content-between align-items-center my-3">
+        <button  class="btn btn-success btn-sm delete-btn" 
+        data-bs-toggle="modal"
+        data-bs-target="#createCustomerModal">
+        Add Customer
+        </button>
+    </div>
+    
+
+    {% comment %} Create Modal {% endcomment %}
+    <div class="modal fade" id="createCustomerModal" tabindex="-1" aria-labelledby="createCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCustomerModalLabel">Create Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createCustomerForm" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" id="client_id" name="client_id">
+                        <div class="mb-3">
+                            <label for="customer_name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="customer_name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customer_email" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="customer_email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customer_address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="customer_address" name="address">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customer_client" class="form-label">Client</label>
+                            <select class= "for control" id="customer_client" name= "client">
+                                <option value= "">Select Client</option>
+                                {%for client in clients %}
+                                    <option value="{{ client.id }}">{{ client.name }}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div class="container mt-4">
+        <table id="clientTable" class="display table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Client</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.client }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        var customersData = {};
+
+        {% for customer in customers%}
+            customersData["{{customer.id}}"]={
+                id: "{{customer.id}}",
+                name: "{{customer.name}}",
+                email: "{{customer.email}}",
+                address: "{{customer.address}}",
+                client: "{{customer.client.name}}",
+            };
+        {% endfor %}
+        console.log(customersData);
+        
+        
+        
+        $(document).ready(function(){
+            $("#createCustomerForm").submit(function(e){
+                e.preventDefault();
+                let formData= $(this).serialize();
+                console.log(formData)
+                $.ajax({
+                    url: "{% url 'customer_create' %}",
+                    type: "POST",
+                    data : formData,
+                    success: function(response){
+                        alert("Client created successfully")
+                        location.reload();
+                    },
+                    error: function(response){
+                        alert("Error creating client.");
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+</html>

@@ -1,5 +1,8 @@
-# from django.contrib import admin
+from django.contrib import admin
+from .models import Customer
 
-# class CustomerAdmin(admin.Model):
-#     list_display = ('name', 'email', 'address', 'client')
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'address', 'client')
 
+
+admin.site.register(Customer, CustomerAdmin)
