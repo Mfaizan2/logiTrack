@@ -5,6 +5,7 @@ from django.contrib import messages
 
 
 def client_create(request):
+    print(request.POST)
     if request.method == 'POST':
         name = request.POST.get('name')
         phone_num = request.POST.get('phone_num')
@@ -20,9 +21,8 @@ def client_create(request):
             address=address
         )
         messages.success(request,'Created Successfuly!')
-        return redirect('client_list')
-    
-    return render(request, 'client_app/create.html')
+        return JsonResponse({"message": "Client updated successfully!"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def client_list(request):
@@ -67,15 +67,16 @@ def client_delete(request):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 def client_copy(request):
-    print('khan')
     if request.method == "POST":
-        client_id =int(request.POST.get("client_id"))
-
-        client = Client.objects.get(id=client_id)
+        name = request.POST.get('name')
+        phone_num = request.POST.get('phone_num')
+        address = request.POST.get('address')
+        
         new_client = Client.objects.create(
-            name=client.name + "-copy",
-            phone_num=client.phone_num ,
-            address=client.address + "-copy"
+            name=name,
+            phone_num=phone_num ,
+            address=address
         )
         return JsonResponse({"message": "Client updated successfully!"})
     return JsonResponse({"error": "Invalid request"}, status=400)
+
