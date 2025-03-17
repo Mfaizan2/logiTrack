@@ -10,7 +10,6 @@ def customer_list (request):
     return render(request, "customer_app/customer_list.html", {"customers": customers, "clients": clients})
 
 def customer_create(request):
-    print('wajahat')
     if request.method =="POST":
         name = request.POST.get('name')
         email = request.POST.get('email')

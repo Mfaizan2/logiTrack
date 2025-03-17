@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'client',
     'dashboard',
     'customer',
+    'sitee'
 ]
 
 MIDDLEWARE = [

@@ -14,14 +14,20 @@
             <h2 class="mb-4">Dashboard</h2>
     
             <div class="d-flex justify-content-center gap-3">
+                
                 <!-- Clients Button -->
                 <a href="{% url 'client_list' %}" class="btn btn-primary btn-lg">
                     <i class="fas fa-users"></i> View Clients
                 </a>
-    
+                
                 <!-- Customers Button -->
                 <a href="{% url 'customer_list' %}" class="btn btn-primary btn-lg">
                     <i class="fas fa-user"></i> View Customers
+                </a>
+
+                <!-- sitee Button -->
+                <a href="{% url 'sitee_list' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-users"></i> View Sitee
                 </a>
             </div>
         </div>
