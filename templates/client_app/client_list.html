@@ -25,16 +25,6 @@
         <div class="d-flex justify-content-end mb-3">
             <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-sm">Dashboard</a>
         </div>
-
-
-        <button type='button' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal">
-            View Client Details
-        </button>
-        
-
-        <button type='button' class="btn btn-primary" onclick="hideDetailButton()">
-            Hide View Client Detail
-        </button>
     </div>
 
     <!-- Edit Modal -->
@@ -313,7 +303,6 @@
                     url: "{% url 'client_delete' %}",
                     data: formData,
                     success: function(response) {
-                        alert("Client updated successfully!");
                         location.reload();
                     },
                     error: function(xhr) {
@@ -342,11 +331,6 @@
                 });
             });
         });
-
-        function hideDetailButton(){
-            document.querySelector("[data-bs-target='#clientModal']").style.display="none";
-        }
-        
         
         function send_ajax(){
             $.ajax({

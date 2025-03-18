@@ -23,5 +23,6 @@ urlpatterns = [
     path('client/', include('client.urls')),
     path('', include('dashboard.urls')),
     path('customers/', include('customer.urls')),
-    path('sitee/', include('sitee.urls'))
+    path('sitee/', include('sitee.urls')),
+    path('assets/', include('asset.urls')),
 ]

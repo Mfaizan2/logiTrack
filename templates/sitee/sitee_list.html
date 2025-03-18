@@ -9,15 +9,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-lg">
-        <i class="fas fa-users"></i> Dashboard
-    </a>
-    <div class= "d-flex justify-content-between align-items-center my-3">
-        <button  class="btn btn-success btn-sm delete-btn" 
-        data-bs-toggle="modal"
-        data-bs-target="#createSiteeModal">
-        Add Sitee
-        </button>
+    <div class="container mt-5">
+        <h4 class="mb-0">Asset List</h4>
+        <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-users"></i> Dashboard
+        </a>
+        <div class= "d-flex justify-content-between align-items-center my-3">
+            <button  class="btn btn-success btn-sm delete-btn" 
+            data-bs-toggle="modal"
+            data-bs-target="#createSiteeModal">
+            Add Sitee
+            </button>
+        </div>
     </div>
 
     <div class="modal fade" id="createSiteeModal" tabindex="-1" aria-labelledby="createSiteeModalLable" aria-hidden="true">
@@ -34,7 +37,7 @@
                 <div class="modal-body">
                     <form id = createSiteeForm method = "POST">
                         {% csrf_token %}
-                        <input type="hidden" id="client_id" name="client_id">
+                        <input type="hidden" id="sitee_id" name="sitee_id">
                         <div class="mb-3">
                             <label for="sitee_name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="sitee_name" name="name">
@@ -68,7 +71,7 @@
 
 
     <div class="container mt-4">
-        <table id="clientTable" class="display table table-bordered table-striped">
+        <table id="siteeTable" class="display table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>ID#</th>
@@ -76,17 +79,19 @@
                     <th>Phone #</th>
                     <th>Address</th>
                     <th>Customer</th>
+                    <th>Client</th>
                 </tr>
             </thead>
             <tbody>
                 {% for sitee in sitees %}
-                <tr>
-                    <td>{{ sitee.id }}</td>
-                    <td>{{ sitee.name }}</td>
-                    <td>{{ sitee.phone_num }}</td>
-                    <td>{{ sitee.address }}</td>
-                    <td>{{ sitee.customer }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ sitee.id }}</td>
+                        <td>{{ sitee.name }}</td>
+                        <td>{{ sitee.phone_num }}</td>
+                        <td>{{ sitee.address }}</td>
+                        <td>{{ sitee.customer }}</td>
+                        <td>{{ sitee.customer.client }}</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -118,7 +123,7 @@
                         location.reload();
                     },
                     error: function(response){
-                        alert("Error creating client.");
+                        alert("Error creating sitee.");
                     }
                 });
             });

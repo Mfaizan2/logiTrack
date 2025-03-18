@@ -5,7 +5,7 @@ from customer.models import Customer
 
 
 def sitee_list(request):
-    sitees = Sitee.objects.all()
+    sitees = Sitee.objects.select_related("customer__client").all()
     customers = Customer.objects.all()
     print(sitees)
     return render(request , "sitee/sitee_list.html", {'sitees': sitees, "customers": customers})
