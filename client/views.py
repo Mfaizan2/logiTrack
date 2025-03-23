@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Client
 from django.contrib import messages
@@ -26,8 +26,23 @@ def client_create(request):
 
 
 def client_list(request):
+
+    page = int(request.GET.get('page', 1))
+    per_page = 5
+    start = (page - 1)*per_page
+    end = start + per_page
+
     clients = Client.objects.all()
-    return render(request, 'client_app/client_list.html',{'clients':clients})
+    total_clients = clients.count()
+    total_pages = (total_clients + per_page - 1) // per_page
+    clients = clients[start:end]
+    print(clients)
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        clients = (list(clients.values()))
+        return JsonResponse({'clients': clients, 'total_pages':total_pages, 'current_page': page})
+    
+    return render(request, 'client_app/client_list.html')
 
 def client_list_in_json(request):
     clients = Client.objects.all().values("id", "name", "phone_num", "address")

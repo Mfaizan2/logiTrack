@@ -14,8 +14,6 @@
     <div class="container mt-5">
         <h2>Client List</h2>
 
-
-        
         <button  class="btn btn-success btn-sm delete-btn" 
         data-bs-toggle="modal"
         data-bs-target="#createClientModal">
@@ -25,6 +23,13 @@
         <div class="d-flex justify-content-end mb-3">
             <a href="{% url 'dashboard:home' %}" class="btn btn-primary btn-sm">Dashboard</a>
         </div>
+    </div>
+
+    <!--Pagination-->
+    <div class="d-flex justify-content-between mt-3">
+        <button id="prevPage" class="btn btn-sm btn-secondary" disabled>Previous</button>
+        <span id="paginationText">Page 1 of X</span>
+        <button id="nextPage" class="btn btn-sm btn-secondary" disabled>Next</button>
     </div>
 
     <!-- Edit Modal -->
@@ -130,12 +135,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="deleteClientForm" method="POST">
-                        <h3>
-                            
-                        </h3>
                         {% csrf_token %}
                         <input type="hidden" id="client_id" name="client_id">
-                        
                         <button type="submit" class="btn btn-primary">Yes Delete</button>
                     </form>
                 </div>
@@ -183,21 +184,8 @@
             </tbody>
         </table>
     </div>
-
-    
-
     <script>
-        var clientsData = {}
         
-        {% for client in clients %}
-            clientsData["{{ client.id }}"] = {
-                id: "{{ client.id }}",
-                name: "{{ client.name }}",
-                phone_num: "{{ client.phone_num }}",
-                address: "{{ client.address }}"
-            };
-        {% endfor %}
-        console.log(clientsData);
     
         function getClientDetails(clientId) {
             if (clientsData[clientId]) {
@@ -212,10 +200,93 @@
                 console.log("Client not found.");
             }
         }
+        $(document).ready(function() {
+            loadePage(1); // Fetch first page when the page loads
+        });
 
-        //Delete Client 
+        //Page ajax
+        let current_page = 1
+        function loadePage(page){
+            $.ajax({
+                url :"/clients/?page=" + page,
+                type: "GET",
+                headers:{"X-Requested-With" : "XMLHttpRequest"},
+                success:function(response){
+                    updateTable(response.clients);
+                    updatePagination(response.current_page, response.total_pages);
+                },
+                error : function(xhr){
+                    alert("Pagination is not working");
+                }
+            });
+        }
 
+        let clientsData = {};
+        //updateTable
+        function updateTable(clients){        
+            clients.forEach(client => {
+                clientsData[client.id] = {
+                    id: client.id,
+                    name: client.name,
+                    phone_num: client.phone_num,
+                    address: client.address
+                };
+            });
+            console.log(clientsData)
+
+            let tablebody = $('#clientTable tbody');
+            tablebody.empty();
+            clients.forEach(client =>{
+
+                let row = `<tr>
+                    <td>${client.id}</td>
+                    <td>${client.name}</td>
+                    <td>${client.phone_num}</td>
+                    <td>${client.address}</td>
+                    <td>
+                        <button onclick="getClientDetails(${client.id})" class="btn btn-warning btn-sm edit-btn" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#editClientModal">
+                            Edit
+                        </button>
+                        <button onclick="deleteClientDetails(${client.id})" class="btn btn-danger btn-sm delete-btn" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteClientModal">
+                            Delete
+                        </button>
+                        <button onclick="copyClientDetails(${client.id})" class="btn btn-primary btn-sm copy-btn" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#copyClientModal">
+                            Copy
+                        </button>
+                    </td>
+                </tr>`;
+                    tablebody.append(row);
+            });
+        }
+
+        //updatePagination
+        function updatePagination(current, total){
+            $("#paginationText").text(`Page ${current} of ${total}`);
+
+            $("#prevPage").prop("disabled", current == 1);
+            $("#nextPage").prop("disabled", current >= total);
+        }
+
+        $("#prevPage").click(function(){
+            if(current_page > 1){
+                current_page --;
+                loadePage(current_page);
+            }
+        });
+
+        $("#nextPage").click(function(){
+            current_page++;
+            loadePage(current_page);
+        });
+        //Delete Client
         function deleteClientDetails(clientId){
+            console.log(clientId)
             if (clientsData[clientId]) {
                 console.log("Client Name:", clientsData[clientId].name);
                 console.log("Phone Number:", clientsData[clientId].phone_num);
@@ -226,7 +297,7 @@
                 console.log("Client not found.");
             }
         }
-
+        //Copy Client 
         function copyClientDetails(clientId){
             if (clientsData[clientId]){
                 console.log("filling copy modal with client id:", clientId);
@@ -293,10 +364,9 @@
         
         //Delete ajax
         $(document).ready(function() {
-            $("#deleteClientForm").submit(function(e) {
+            $("#deleteClientForm").submit(function(e){
                 e.preventDefault();
                 let formData = $(this).serialize();
-                console.log(formData)
                 console.log("Client ID:", $("#client_id").val());
                 $.ajax({
                     type: "POST",

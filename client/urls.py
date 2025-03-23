@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.client_list, name = 'client_list'),
+    path('clients/', views.client_list, name = 'client_list'),
     path('client_list_in_json', views.client_list_in_json, name = 'client_list_in_json'),
     path('create/', views.client_create, name = 'client_create'),
     path('update/', views.client_update, name = 'client_update'),
