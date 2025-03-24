@@ -183,9 +183,13 @@
             });
         }
 
+        $('#filterForm').submit(function(e){
+            e.preventDefault();
+            loadPage(1);
+        })
+
         $('#prevPage').click(function(){
             if (current_page > 1){
-                console.log('prevPage')
                 loadPage(current_page - 1);
             }
         });
@@ -225,7 +229,7 @@
             e.preventDefault();
             let formData= $(this).serialize();
             $.ajax({
-                url: "{% url 'asset_create' %}",
+                url: '/create_asset/',
                 type:"POST",
                 data: formData,
                 success: function(response){

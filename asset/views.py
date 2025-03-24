@@ -54,7 +54,6 @@ def asset_list(request):
         })
 
 def asset_create(request):
-    print(request.POST)
     if request.method == 'POST':
         name = request.POST.get('name')
         phone_num = request.POST.get('phone_num')
