@@ -13,7 +13,7 @@
         <h4 class="mb-0">Asset List</h4>
     
         <div class="d-flex justify-content-end mb-3">
-            <a href="{% url 'dashboard:home' %}" class='btn btn-primary btn-lg'>
+            <a href="{% url 'home' %}" class='btn btn-primary btn-lg'>
                 <i class='fas fa-users'></i> Dashboard
             </a>
         </div>
@@ -24,6 +24,10 @@
     </div>
     <div class = 'container my-3'>
         <form method = 'GET' id='filterForm' class="row g-2">
+            <div class = "col-md-3">
+                <label for='search' class= "form-label">Search</label>
+                <input type = 'text' name = 'search' id = 'search'class = 'form-control' placehoder="Search....">
+            </div>
             <!--client-->
             <div class='col-md-3'>
                 <label for='client' class= 'form-label'>Client</label>
@@ -162,6 +166,9 @@
         {% endfor %}
         
         let current_page = {{current_page}} ;
+        $("#search").on('keyup',function(){
+            loadPage(1);
+        });
 
         function loadPage(page){
             let formData = $('#filterForm').serialize() + "&page=" + page;

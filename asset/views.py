@@ -8,7 +8,7 @@ from client.models import Client
 def asset_list(request):
     print("GET")
     print(request.GET)
-
+    search_query = request.GET.get('search', '')
     page = int(request.GET.get('page', 1))
     per_page = 3
     start = (page - 1)*per_page
@@ -27,6 +27,8 @@ def asset_list(request):
         assets = assets.filter(sitee__customer__id=customer_id)
     if sitee_id:
         assets = assets.filter(sitee__id= sitee_id)
+    if search_query:
+        assets = assets.filter(name__icontains = search_query)
     
     total_assets = assets.count()
     total_pages = (total_assets + per_page - 1) // per_page
